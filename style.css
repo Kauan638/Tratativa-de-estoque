@@ -1614,3 +1614,281 @@ BOTÕES DE AÇÃO — mais presença
     }
 
 }
+
+/* =====================================
+KPIs — CARD COM ÍCONE CIRCULAR
+(as classes .kpi / .kpi-icon nunca tinham
+sido definidas nesse arquivo — o HTML usa
+esse padrão, mas a base copiada do Gerador
+de Abastecimento usa .kpi-card, diferente)
+===================================== */
+
+.kpis{
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+
+    gap:16px;
+
+    margin-bottom:24px;
+
+}
+
+.kpi{
+
+    background:var(--surface);
+
+    border:1px solid var(--border);
+
+    border-radius:var(--radius-lg);
+
+    padding:20px 18px;
+
+    text-align:center;
+
+    transition:.25s;
+
+    position:relative;
+
+    min-height:140px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:center;
+
+    align-items:center;
+
+}
+
+.kpi:hover{
+
+    transform:translateY(-4px);
+
+    box-shadow:0 14px 30px rgba(0,0,0,.28);
+
+}
+
+.kpi-icon{
+
+    width:46px;
+
+    height:46px;
+
+    border-radius:50%;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    font-size:20px;
+
+    margin-bottom:12px;
+
+    background:var(--surface-alt);
+
+    border:1px solid var(--border-light);
+
+}
+
+.kpi span{
+
+    display:block;
+
+    font-size:.68rem;
+
+    font-weight:700;
+
+    letter-spacing:.08em;
+
+    text-transform:uppercase;
+
+    color:var(--text-muted);
+
+    margin-bottom:6px;
+
+}
+
+.kpi h2{
+
+    font-family:var(--font-mono);
+
+    font-size:1.8rem;
+
+    font-weight:700;
+
+    margin:0;
+
+    color:var(--text);
+
+}
+
+/* CORES — borda lateral = significado real do dado
+(reforça as classes já usadas no HTML/no bloco de
+"KPIs — STATUS DE PULMÃO" mais acima, que definem só
+a borda; aqui completamos o resto do card+ícone) */
+
+.kpi-total .kpi-icon{ box-shadow:0 0 0 1px var(--blue) inset; color:var(--blue); }
+.kpi-pulmoes .kpi-icon{ box-shadow:0 0 0 1px var(--blue) inset; color:var(--blue); }
+.kpi-ativos .kpi-icon{ box-shadow:0 0 0 1px var(--green) inset; color:var(--green); }
+.kpi-antigos .kpi-icon{ box-shadow:0 0 0 1px var(--text-muted) inset; color:var(--text-muted); }
+.kpi-perda-qtd .kpi-icon{ box-shadow:0 0 0 1px var(--amber) inset; color:var(--amber); }
+.kpi-perda-valor .kpi-icon{ box-shadow:0 0 0 1px var(--red) inset; color:var(--red); }
+
+@media(max-width:700px){
+
+    .kpis{
+
+        grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+
+    }
+
+}
+
+/* =====================================
+FILTROS — BOTÕES (nunca tinham sido
+estilizados — bug que já existia até no
+Gerador de Abastecimento original)
+===================================== */
+
+.filtros button{
+
+    padding:12px 20px;
+
+    border:none;
+
+    border-radius:var(--radius);
+
+    background:var(--amber);
+
+    color:#241A05;
+
+    font-weight:700;
+
+    font-size:.82rem;
+
+    letter-spacing:.05em;
+
+    text-transform:uppercase;
+
+    cursor:pointer;
+
+    transition:.2s;
+
+    font-family:var(--font-body);
+
+}
+
+.filtros button:hover{
+
+    filter:brightness(1.08);
+
+    transform:translateY(-2px);
+
+}
+
+.filtros button:last-of-type{
+
+    background:transparent;
+
+    border:1px solid var(--border-light);
+
+    color:var(--text-muted);
+
+}
+
+.filtros button:last-of-type:hover{
+
+    border-color:var(--amber);
+
+    color:var(--amber-strong,var(--amber));
+
+}
+
+/* =====================================
+RESULTADO — WRAPPER DA TABELA
+(classe .resultado usada no HTML mas
+nunca definida nesse arquivo)
+===================================== */
+
+.resultado{
+
+    background:var(--surface);
+
+    border:1px solid var(--border);
+
+    border-radius:var(--radius-lg);
+
+    padding:0;
+
+    overflow:auto;
+
+    margin-top:16px;
+
+}
+
+.resultado table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+    min-width:900px;
+
+}
+
+.resultado thead{
+
+    background:var(--surface-alt);
+
+    position:sticky;
+
+    top:0;
+
+}
+
+.resultado th{
+
+    padding:14px 12px;
+
+    font-size:.7rem;
+
+    font-weight:700;
+
+    letter-spacing:.06em;
+
+    text-transform:uppercase;
+
+    color:var(--text-muted);
+
+    border-bottom:1px solid var(--border);
+
+    text-align:left;
+
+    white-space:nowrap;
+
+}
+
+.resultado td{
+
+    padding:12px;
+
+    font-size:.82rem;
+
+    font-family:var(--font-mono);
+
+    color:var(--text);
+
+    border-bottom:1px solid var(--border);
+
+}
+
+.resultado tbody tr:hover{
+
+    background:rgba(255,255,255,.02);
+
+}
