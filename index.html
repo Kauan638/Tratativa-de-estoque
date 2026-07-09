@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Tratativa de Estoque — Pulmões Antigos</title>
+
+<link rel="stylesheet" href="style.css">
+
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+
+</head>
+
+<body>
+
+<header class="topo">
+
+    <div>
+
+        <h1>
+
+            <span class="logo-box">
+                📦
+            </span>
+
+            TRATATIVA <span>DE ESTOQUE</span>
+
+        </h1>
+
+        <p>
+            Pulmões Antigos · Cruzamento por Item · PCP
+        </p>
+
+    </div>
+
+</header>
+
+<!-- ===================================== -->
+<!-- PASSO 1 — UPLOAD DO HISTÓRICO -->
+<!-- ===================================== -->
+
+<section class="card">
+
+    <h2>
+        1️⃣ Histórico de Movimentação
+    </h2>
+
+    <p class="passo-explicacao">
+        Suba o Excel com o histórico de movimentação (uma aba por item — sem cabeçalho,
+        exatamente como exportado do sistema).
+    </p>
+
+    <div class="upload-linha">
+
+        <label
+        for="arquivoHistorico"
+        class="upload-btn">
+
+            📂 Selecionar Arquivo
+
+        </label>
+
+        <input
+        type="file"
+        id="arquivoHistorico"
+        accept=".xlsx,.xls"
+        class="file-hidden"
+        onchange="carregarAbas()">
+
+        <div
+        id="nomeHistorico"
+        class="arquivo-selecionado-inline">
+
+            Nenhum arquivo carregado
+
+        </div>
+
+    </div>
+
+    <div id="listaAbas" class="lista-abas"></div>
+
+</section>
+
+<!-- ===================================== -->
+<!-- PASSO 2 — TRATATIVA DE ESTOQUE (OPCIONAL) -->
+<!-- ===================================== -->
+
+<section class="card">
+
+    <h2>
+        2️⃣ Área de Tratativa de Estoque <span class="opcional-tag">opcional</span>
+    </h2>
+
+    <p class="passo-explicacao">
+        Se você já tiver o export com SKU, Descrição e Valor Unitário, suba aqui —
+        a ferramenta cruza automaticamente pra calcular a perda em R$.
+        Sem esse arquivo, a perda aparece só em quantidade.
+    </p>
+
+    <div class="upload-linha">
+
+        <label
+        for="arquivoTratativa"
+        class="upload-btn">
+
+            📂 Selecionar Arquivo
+
+        </label>
+
+        <input
+        type="file"
+        id="arquivoTratativa"
+        accept=".xlsx,.xls,.csv"
+        class="file-hidden">
+
+        <div
+        id="nomeTratativa"
+        class="arquivo-selecionado-inline">
+
+            Nenhum arquivo carregado
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- ===================================== -->
+<!-- AÇÃO -->
+<!-- ===================================== -->
+
+<section class="card acao-card">
+
+    <button
+    class="btn-processar"
+    onclick="processarTudo()">
+
+        🚀 Processar Histórico
+
+    </button>
+
+    <button
+    class="btn-exportar"
+    onclick="exportarExcel()">
+
+        📥 Exportar Excel
+
+    </button>
+
+</section>
+
+<!-- ===================================== -->
+<!-- LOADING -->
+<!-- ===================================== -->
+
+<section class="loading-container">
+
+    <div
+    id="loadingBox"
+    class="loading-box">
+
+        <div class="loading-text">
+
+            Processando...
+
+            <span id="loadingPercent">
+                0%
+            </span>
+
+        </div>
+
+        <div class="loading-bar">
+
+            <div
+            id="loadingFill"
+            class="loading-fill">
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- ===================================== -->
+<!-- KPIs -->
+<!-- ===================================== -->
+
+<section class="kpis">
+
+    <div class="kpi kpi-total">
+        <div class="kpi-icon">📦</div>
+        <span>Itens Processados</span>
+        <h2 id="kpiItens">0</h2>
+    </div>
+
+    <div class="kpi kpi-pulmoes">
+        <div class="kpi-icon">📍</div>
+        <span>Pulmões Únicos</span>
+        <h2 id="kpiPulmoes">0</h2>
+    </div>
+
+    <div
+    class="kpi kpi-ativos"
+    onclick="filtrarStatus('ativo')">
+        <div class="kpi-icon">🟢</div>
+        <span>Pulmões Ativos</span>
+        <h2 id="kpiAtivos">0</h2>
+    </div>
+
+    <div
+    class="kpi kpi-antigos"
+    onclick="filtrarStatus('antigo')">
+        <div class="kpi-icon">⚪</div>
+        <span>Pulmões Antigos/Encerrados</span>
+        <h2 id="kpiAntigos">0</h2>
+    </div>
+
+    <div class="kpi kpi-perda-qtd">
+        <div class="kpi-icon">📉</div>
+        <span>Possível Perda (Qtd)</span>
+        <h2 id="kpiPerdaQtd">0</h2>
+    </div>
+
+    <div class="kpi kpi-perda-valor">
+        <div class="kpi-icon">💰</div>
+        <span>Perda Estimada (R$)</span>
+        <h2 id="kpiPerdaValor">—</h2>
+    </div>
+
+</section>
+
+<!-- ===================================== -->
+<!-- FILTROS -->
+<!-- ===================================== -->
+
+<section class="filtros">
+
+    <input
+    type="text"
+    id="fSku"
+    placeholder="🔎 SKU, descrição ou endereço"
+    />
+
+    <select id="fStatusPulmao">
+
+        <option value="">
+            Status: Todos
+        </option>
+
+        <option value="ativo">
+            🟢 Ativo
+        </option>
+
+        <option value="antigo">
+            ⚪ Antigo/Encerrado
+        </option>
+
+    </select>
+
+    <button onclick="aplicarFiltros()">
+        Filtrar
+    </button>
+
+    <button onclick="limparFiltros()">
+        Limpar
+    </button>
+
+</section>
+
+<!-- ===================================== -->
+<!-- RESULTADO — PULMÕES -->
+<!-- ===================================== -->
+
+<section class="card">
+
+    <h2>
+        📍 Endereços de Pulmão (deduplicados)
+    </h2>
+
+    <div class="resultado">
+
+    <table>
+
+    <thead>
+
+    <tr>
+
+        <th>SKU</th>
+        <th>Descrição</th>
+        <th>Endereço Pulmão</th>
+        <th>Status</th>
+        <th>Primeira Movimentação</th>
+        <th>Última Movimentação</th>
+        <th>Saldo Final</th>
+
+    </tr>
+
+    </thead>
+
+    <tbody id="tbodyPulmoes"></tbody>
+
+    </table>
+
+    </div>
+
+</section>
+
+<!-- ===================================== -->
+<!-- RESULTADO — POSSÍVEIS PERDAS -->
+<!-- ===================================== -->
+
+<section class="card">
+
+    <h2>
+        📉 Possíveis Perdas (Ajuste de Endereço / Ajuste de Armazenagem / Inventário)
+    </h2>
+
+    <div class="resultado">
+
+    <table>
+
+    <thead>
+
+    <tr>
+
+        <th>SKU</th>
+        <th>Descrição</th>
+        <th>Quantidade Perdida</th>
+        <th>Valor Unitário</th>
+        <th>Perda Estimada (R$)</th>
+        <th>Qtd. de Ajustes</th>
+
+    </tr>
+
+    </thead>
+
+    <tbody id="tbodyPerdas"></tbody>
+
+    </table>
+
+    </div>
+
+</section>
+
+<script src="script.js"></script>
+
+</body>
+
+</html>
