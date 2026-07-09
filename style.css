@@ -1024,6 +1024,12 @@ CARDS DE PASSO (upload sequencial)
 
 }
 
+.file-hidden{
+
+    display:none;
+
+}
+
 .arquivo-selecionado-inline{
 
     font-size:.8rem;
