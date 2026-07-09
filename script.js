@@ -122,16 +122,25 @@ function renderizarListaAbas(){
 
     container.innerHTML = "";
 
-    workbookHistorico.SheetNames.forEach(nomeAba=>{
+    workbookHistorico.SheetNames.forEach((nomeAba, indice)=>{
 
         const linha = document.createElement("div");
 
         linha.className = "aba-linha";
 
         linha.innerHTML = `
-            <div class="aba-nome">📑 ${nomeAba}</div>
-            <input type="text" placeholder="SKU / Código do item" id="sku-${cssEscape(nomeAba)}">
-            <input type="text" placeholder="Descrição (opcional — vem do arquivo de Tratativa se você subir)" id="desc-${cssEscape(nomeAba)}">
+            <div class="aba-nome">
+                <span class="aba-numero">${indice + 1}</span>
+                📑 ${nomeAba}
+            </div>
+            <div class="aba-campo">
+                <label for="sku-${cssEscape(nomeAba)}">SKU / Código</label>
+                <input type="text" placeholder="ex: 105670" id="sku-${cssEscape(nomeAba)}">
+            </div>
+            <div class="aba-campo">
+                <label for="desc-${cssEscape(nomeAba)}">Descrição <span class="campo-opcional">(some se subir a Tratativa)</span></label>
+                <input type="text" placeholder="ex: Detergente 5L" id="desc-${cssEscape(nomeAba)}">
+            </div>
         `;
 
         container.appendChild(linha);

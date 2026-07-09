@@ -16,6 +16,8 @@
 
 <body>
 
+<div class="container">
+
 <header class="topo">
 
     <div>
@@ -42,10 +44,11 @@
 <!-- PASSO 1 — UPLOAD DO HISTÓRICO -->
 <!-- ===================================== -->
 
-<section class="card">
+<section class="card card-passo card-passo-obrigatorio">
 
     <h2>
-        1️⃣ Histórico de Movimentação
+        <span class="passo-badge">1</span>
+        Histórico de Movimentação
     </h2>
 
     <p class="passo-explicacao">
@@ -88,10 +91,11 @@
 <!-- PASSO 2 — TRATATIVA DE ESTOQUE (OPCIONAL) -->
 <!-- ===================================== -->
 
-<section class="card">
+<section class="card card-passo card-passo-opcional">
 
     <h2>
-        2️⃣ Área de Tratativa de Estoque <span class="opcional-tag">opcional</span>
+        <span class="passo-badge passo-badge-opcional">2</span>
+        Área de Tratativa de Estoque <span class="opcional-tag">opcional</span>
     </h2>
 
     <p class="passo-explicacao">
@@ -107,6 +111,7 @@
         class="upload-btn">
 
             📂 Selecionar Arquivo
+
 
         </label>
 
@@ -275,10 +280,10 @@
 <!-- RESULTADO — PULMÕES -->
 <!-- ===================================== -->
 
-<section class="card">
+<section class="card card-resultado card-resultado-pulmoes">
 
     <h2>
-        📍 Endereços de Pulmão (deduplicados)
+        📍 Endereços de Pulmão <span class="subtitulo-h2">(deduplicados)</span>
     </h2>
 
     <div class="resultado">
@@ -313,10 +318,10 @@
 <!-- RESULTADO — POSSÍVEIS PERDAS -->
 <!-- ===================================== -->
 
-<section class="card">
+<section class="card card-resultado card-resultado-perdas">
 
     <h2>
-        📉 Possíveis Perdas (Ajuste de Endereço / Ajuste de Armazenagem / Inventário)
+        📉 Possíveis Perdas <span class="subtitulo-h2">(Ajuste de Endereço / Ajuste de Armazenagem / Inventário)</span>
     </h2>
 
     <div class="resultado">
@@ -347,6 +352,8 @@
 </section>
 
 <script src="script.js"></script>
+
+</div>
 
 </body>
 
